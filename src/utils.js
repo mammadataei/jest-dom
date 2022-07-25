@@ -228,6 +228,24 @@ function toSentence(
   )
 }
 
+function resolvePartialMatchingValue(value) {
+  if (
+    typeof value === 'object' &&
+    value.constructor.name === 'StringContaining'
+  ) {
+    return new RegExp(value.sample)
+  }
+
+  if (
+    typeof value === 'object' &&
+    value.constructor.name === 'StringMatching'
+  ) {
+    return value.sample
+  }
+
+  return value
+}
+
 export {
   HtmlElementTypeError,
   NodeTypeError,
@@ -242,4 +260,5 @@ export {
   getSingleElementValue,
   compareArraysAsSet,
   toSentence,
+  resolvePartialMatchingValue,
 }

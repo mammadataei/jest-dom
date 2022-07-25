@@ -5,6 +5,7 @@ import {
   HtmlElementTypeError,
   NodeTypeError,
   toSentence,
+  resolvePartialMatchingValue,
 } from '../utils'
 import document from './helpers/document'
 
@@ -208,5 +209,27 @@ describe('toSentence', () => {
 
   it('turns empty array into empty string', () => {
     expect(toSentence([])).toBe('')
+  })
+})
+
+describe('resolvePartialMatchingValue', () => {
+  it('returns the value untouched if it is a string', () => {
+    expect(resolvePartialMatchingValue('foo')).toEqual('foo')
+  })
+
+  it('returns the value as RegExp if it is an instanceof StringContaining', () => {
+    expect(resolvePartialMatchingValue(expect.stringContaining('foo'))).toEqual(
+      /foo/,
+    )
+  })
+
+  it('returns the value as RegExp if it is an instanceof StringMatching', () => {
+    expect(resolvePartialMatchingValue(expect.stringMatching(/foo/))).toEqual(
+      /foo/,
+    )
+
+    expect(resolvePartialMatchingValue(expect.stringMatching('foo'))).toEqual(
+      /foo/,
+    )
   })
 })
