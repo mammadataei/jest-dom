@@ -1,31 +1,7 @@
-import {checkHtmlElement, getTag} from './utils'
-
-const FORM_TAGS = ['form', 'input', 'select', 'textarea']
-
-function isElementHavingAriaInvalid(element) {
-  return (
-    element.hasAttribute('aria-invalid') &&
-    element.getAttribute('aria-invalid') !== 'false'
-  )
-}
-
-function isSupportsValidityMethod(element) {
-  return FORM_TAGS.includes(getTag(element))
-}
-
-function isElementInvalid(element) {
-  const isHaveAriaInvalid = isElementHavingAriaInvalid(element)
-  if (isSupportsValidityMethod(element)) {
-    return isHaveAriaInvalid || !element.checkValidity()
-  } else {
-    return isHaveAriaInvalid
-  }
-}
+import {assertElementIsInvalid, assertElementIsValid} from 'dom-assertions'
 
 export function toBeInvalid(element) {
-  checkHtmlElement(element, toBeInvalid, this)
-
-  const isInvalid = isElementInvalid(element)
+  const isInvalid = assertElementIsInvalid(element).pass
 
   return {
     pass: isInvalid,
@@ -46,9 +22,7 @@ export function toBeInvalid(element) {
 }
 
 export function toBeValid(element) {
-  checkHtmlElement(element, toBeValid, this)
-
-  const isValid = !isElementInvalid(element)
+  const isValid = assertElementIsValid(element).pass
 
   return {
     pass: isValid,
